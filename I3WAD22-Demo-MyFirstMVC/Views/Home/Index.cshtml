@@ -1,17 +1,23 @@
-﻿@using System.Collections.Generic
-@{
-    List<string> names = new List<string> { "Sara", "Alessandra", "Eléonore", "Coline", "Bao", "Maryam", "Kasia", "Anissa" };
+﻿@model HomeIndexViewModel
+
+@{ 
+    ViewData["Title"] = Model.Title;
 }
-<h1>Nouvel Index!</h1>
-@if (names.Count > 0)
+<h1>@Model.Title</h1>
+@if (Model.Students.Count > 0)
 {
 <ul>
-    @foreach (string name in names)
+    @foreach (Student student in Model.Students)
     {
-        <li>@name</li>
+        <li><a href="mailto:@student.Email"><div>@student.Nom @student.Prenom (né en @student.DateNaissance.Year)</div></a></li>
     }
 </ul>
 }
 else { 
     <p>Personnes n'est connecté en ce moment...</p>
 }
+
+<footer>
+    <a href="tel:@Model.Footer_tel"><div>Téléphonez-nous</div></a>
+    <a href="mailto:@Model.Footer_email"><div>Écrivez-nous</div></a>
+</footer>

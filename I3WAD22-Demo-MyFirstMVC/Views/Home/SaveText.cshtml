@@ -1,0 +1,8 @@
+﻿<h1>@ViewData["Title"]</h1>
+
+<p>Le texte a sauvegarder est :</p>
+<textarea disabled>@TempData.Peek("Text")</textarea>
+@*<textarea disabled>@TempData["Text"]</textarea>
+@if (TempData.ContainsKey("Text")) {
+    TempData.Keep();
+}*@
