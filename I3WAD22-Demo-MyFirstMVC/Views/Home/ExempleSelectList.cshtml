@@ -1,0 +1,25 @@
+﻿@model ExempleSelectListForm
+
+@if (string.IsNullOrWhiteSpace(Model.ChoixSelectionne)) { 
+    <p>Pas d'étudiant choisi...</p>
+}
+else
+{
+    <p>Vous avez sélectionné : @Model.ChoixSelectionne</p>
+}
+
+<form method="post">
+    @Html.DropDownListFor(
+        model => model.ChoixSelectionne,
+        Model.Choix.Select(
+            student => new SelectListItem
+            {
+                                            Text = $"{student.Nom} {student.Prenom}",
+                                            Value = student.Email
+                                            }
+                        ),
+        "Veuillez sélectionner un étudiant",
+        new { @class = "form-select" }
+        )
+    <input type="submit" value="Choisir"/>
+</form>

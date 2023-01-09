@@ -1,10 +1,12 @@
 ﻿using I3WAD22_Demo_MyFirstMVC.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace I3WAD22_Demo_MyFirstMVC.Controllers
@@ -12,6 +14,17 @@ namespace I3WAD22_Demo_MyFirstMVC.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private static List<Student> _students = new List<Student>
+                {
+                    new Student {Prenom = "Sara", Nom = "Pehlivan", DateNaissance = new DateTime(1987,9,27), Email="sara.pehlivan@interface3.be"},
+                    new Student {Prenom = "Allessandra", Nom = "Rafaele", DateNaissance = new DateTime(1987,9,27), Email="alessandra.rafaele@interface3.be"},
+                    new Student {Prenom = "Eleonore", Nom = "Stultjens", DateNaissance = new DateTime(1987,9,27), Email="eleonore.stultjens@interface3.be"},
+                    new Student {Prenom = "Coline", Nom = "Ducourtieux", DateNaissance = new DateTime(1987,9,27), Email="coline.ducourtieux@interface3.be"},
+                    new Student {Prenom = "Bao", Nom = "Hoang", DateNaissance = new DateTime(1987,9,27), Email="bao.hoang@interface3.be"},
+                    new Student {Prenom = "Mariam", Nom = "Boudrah", DateNaissance = new DateTime(1987,9,27), Email="mariam.boudrah@interface3.be"},
+                    new Student {Prenom = "Kasia", Nom = "Drzazgowska", DateNaissance = new DateTime(1987,9,27), Email="kasia.drzazgowska@interface3.be"},
+                    new Student {Prenom = "Anissa", Nom = "Bojabah", DateNaissance = new DateTime(1987,9,27), Email="anissa.bojabah@interface3.be"}
+                };
 
         [ViewData]
         public string Title { get; set; }
@@ -26,17 +39,7 @@ namespace I3WAD22_Demo_MyFirstMVC.Controllers
             
             HomeIndexViewModel model = new HomeIndexViewModel(
                 "Nouvelle page d'accueil!",
-                new List<Student>
-                {
-                    new Student {Prenom = "Sara", Nom = "Pehlivan", DateNaissance = new DateTime(1987,9,27), Email="sara.pehlivan@interface3.be"},
-                    new Student {Prenom = "Allessandra", Nom = "Rafaele", DateNaissance = new DateTime(1987,9,27), Email="alessandra.rafaele@interface3.be"},
-                    new Student {Prenom = "Eleonore", Nom = "Stultjens", DateNaissance = new DateTime(1987,9,27), Email="eleonore.stultjens@interface3.be"},
-                    new Student {Prenom = "Coline", Nom = "Ducourtieux", DateNaissance = new DateTime(1987,9,27), Email="coline.ducourtieux@interface3.be"},
-                    new Student {Prenom = "Bao", Nom = "Hoang", DateNaissance = new DateTime(1987,9,27), Email="bao.hoang@interface3.be"},
-                    new Student {Prenom = "Mariam", Nom = "Boudrah", DateNaissance = new DateTime(1987,9,27), Email="mariam.boudrah@interface3.be"},
-                    new Student {Prenom = "Kasia", Nom = "Drzazgowska", DateNaissance = new DateTime(1987,9,27), Email="kasia.drzazgowska@interface3.be"},
-                    new Student {Prenom = "Anissa", Nom = "Bojabah", DateNaissance = new DateTime(1987,9,27), Email="anissa.bojabah@interface3.be"}
-                },
+                _students,
                 "0800/33.800",
                 "samuel.legrain@bstorm.be"
                 );
@@ -76,6 +79,81 @@ namespace I3WAD22_Demo_MyFirstMVC.Controllers
         {
             Title = "Affichage de texte :";
             return View();
+        }
+
+        public IActionResult Login() {
+            return View("LoginTag");
+        }
+
+        [HttpPost]
+        public IActionResult Login(LoginForm form)
+        {
+            //ValidationLoginCustom(form, ModelState);
+            ValidationPasswordCustom(form, ModelState);
+            if (!ModelState.IsValid) return View("LoginTag");
+            //ici placer appels des fonctions si le formulaire est valide (exemple : enregistrement en DB)
+            return RedirectToAction("Index");
+        }
+
+        private static void ValidationLoginCustom(LoginForm form, ModelStateDictionary modelstate)
+        {
+            if (string.IsNullOrWhiteSpace(form.Email))
+                modelstate.AddModelError(nameof(form.Email),"L'email est obligatoire.");
+
+            if (string.IsNullOrWhiteSpace(form.Passwd))
+            {
+                modelstate.AddModelError(nameof(form.Passwd), "Le mot de passe est obligatoire.");
+                return;
+            }
+
+            if (!Regex.IsMatch(form.Passwd, "[0-9]"))
+                modelstate.AddModelError(nameof(form.Passwd), "Le mot de passe doit contenir un chiffre.");
+
+            if (!Regex.IsMatch(form.Passwd, "[a-z]"))
+                modelstate.AddModelError(nameof(form.Passwd), "Le mot de passe doit contenir une minuscule.");
+
+            if (!Regex.IsMatch(form.Passwd, "[A-Z]"))
+                modelstate.AddModelError(nameof(form.Passwd), "Le mot de passe doit contenir une majuscule.");
+
+            if (!Regex.IsMatch(form.Passwd, "[=+/-/.//?*]"))
+                modelstate.AddModelError(nameof(form.Passwd), "Le mot de passe doit contenir un caractère spécial.");
+
+            if (form.Passwd.Length < 4)
+                modelstate.AddModelError(nameof(form.Passwd), "Le mot de passe est trop court.");
+
+            if (form.Passwd.Length > 32)
+                modelstate.AddModelError(nameof(form.Passwd), "Le mot de passe est trop long.");
+        }
+
+        private static void ValidationPasswordCustom(LoginForm form, ModelStateDictionary modelstate)
+        {
+            if (!(form.Passwd is null))
+            {
+                if (!Regex.IsMatch(form.Passwd, "[0-9]"))
+                    modelstate.AddModelError(nameof(form.Passwd), "Le mot de passe doit contenir un chiffre.");
+
+                if (!Regex.IsMatch(form.Passwd, "[a-z]"))
+                    modelstate.AddModelError(nameof(form.Passwd), "Le mot de passe doit contenir une minuscule.");
+
+                if (!Regex.IsMatch(form.Passwd, "[A-Z]"))
+                    modelstate.AddModelError(nameof(form.Passwd), "Le mot de passe doit contenir une majuscule.");
+
+                if (!Regex.IsMatch(form.Passwd, "[=+/-/.//?*]"))
+                    modelstate.AddModelError(nameof(form.Passwd), "Le mot de passe doit contenir un caractère spécial.");
+            }
+        }
+
+        public IActionResult ExempleSelectList()
+        {
+            ExempleSelectListForm model = new ExempleSelectListForm() { Choix = _students };
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult ExempleSelectList(ExempleSelectListForm form)
+        {
+            form.Choix = _students;
+            return View(form);
         }
     }
 }

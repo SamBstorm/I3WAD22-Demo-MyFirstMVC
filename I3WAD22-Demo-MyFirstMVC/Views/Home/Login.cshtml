@@ -1,0 +1,45 @@
+﻿@using Microsoft.AspNetCore.Mvc.ModelBinding
+@model LoginForm
+@if (!ViewContext.ModelState.IsValid) { 
+@*<div>
+    Il y a @ViewContext.ModelState.ErrorCount erreur@((ViewContext.ModelState.ErrorCount > 1)?"s":"") dans votre formulaire...
+    <dl>
+        @foreach (KeyValuePair<string, ModelStateEntry> modelStateError in ViewContext.ModelState)
+        {
+            @if (modelStateError.Value.Errors.Count() > 0)
+            {
+                <dt>@modelStateError.Key :</dt>
+                <dd>
+                    <ul>
+                        @foreach (ModelError error in modelStateError.Value.Errors)
+                        {
+                            <li>@error.ErrorMessage</li>
+                        }
+                    </ul>
+                </dd>
+            }
+        }
+
+    </dl>
+</div>*@
+    @Html.ValidationSummary(false, $"Il y a {ViewContext.ModelState.ErrorCount} erreur{((ViewContext.ModelState.ErrorCount > 1)?"s":"")} dans votre formulaire...", htmlAttributes : new { @class = "alert bg-danger"})
+}
+
+@using (Html.BeginForm(method : FormMethod.Post))
+{
+    <div>
+        @Html.LabelFor(model => model.Email)
+        @Html.EditorFor(model => model.Email, new { @class = "form-control" })
+        @Html.ValidationMessageFor(expression: model => model.Email,
+                                  message: null,
+                                  htmlAttributes: new { @class = "text-danger" })
+    </div>
+    <div>
+        @Html.LabelFor(model => model.Passwd)
+        @Html.EditorFor(model => model.Passwd, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Passwd, null, new { @class = "text-danger" })
+    </div>
+    <input type="submit" value="Connection!" />
+}
+
+@Html.ActionLink("Revenir sur la page principale","Index","Home",htmlAttributes: new { @class = "btn btn-warning" })

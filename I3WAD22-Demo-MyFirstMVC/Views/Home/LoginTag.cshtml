@@ -1,0 +1,21 @@
+﻿@using Microsoft.AspNetCore.Mvc.ModelBinding
+@model LoginForm
+@if (!ViewContext.ModelState.IsValid) { 
+<div asp-validation-summary="All" class="alert bg-danger">Il y a @ViewContext.ModelState.ErrorCount erreur@((ViewContext.ModelState.ErrorCount > 1)?"s":"") dans votre formulaire..."</div>
+}
+
+<form asp-action="Login" asp-controller="Home" method="post">
+    <div>
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class = "form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div>
+        <label asp-for="Passwd"></label>
+        <input asp-for="Passwd" class= "form-control" />
+        <span asp-validation-for="Passwd" class = "text-danger"></span>
+    </div>
+    <input type="submit" value="Connection!" />
+</form>
+
+<a asp-action="Index" asp-controller="Home" class="btn btn-warning">Revenir sur la page principale</a>
