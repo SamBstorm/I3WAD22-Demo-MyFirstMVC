@@ -1,0 +1,26 @@
+﻿@model I3WAD22_Demo_MyFirstMVC.Models.StudentViewModel.StudentDelete
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>ATTENTION : Suppression</h1>
+
+<h3>Êtes-vous sûre de vouloir supprimer cet étudiant?</h3>
+<div>
+    <h4>@Model.Nom, @Model.Prenom</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="submit" value="Supprimer" class="btn btn-danger" /> |
+        <a asp-action="Index">Retour à la liste</a>
+    </form>
+</div>

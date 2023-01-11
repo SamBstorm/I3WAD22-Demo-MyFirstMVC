@@ -1,5 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Mvc.ModelBinding
 @model LoginForm
+
+@{
+    Layout = "_LayoutDemo";
+ }
+
 @if (!ViewContext.ModelState.IsValid) { 
 @*<div>
     Il y a @ViewContext.ModelState.ErrorCount erreur@((ViewContext.ModelState.ErrorCount > 1)?"s":"") dans votre formulaire...

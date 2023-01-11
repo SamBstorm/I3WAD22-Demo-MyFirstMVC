@@ -1,6 +1,13 @@
 ﻿@*@{
-    ViewData["Title"] = "Privacy Policy";
-}*@
+        ViewData["Title"] = "Privacy Policy";
+    }*@
+
+@section NavCache
+{
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Login">Se connecter</a>
+    </li>
+}
 <h1>@ViewData["Title"]</h1>
 
 <p>Use this page to detail your site's privacy policy.</p>

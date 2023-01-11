@@ -1,0 +1,41 @@
+﻿@model IEnumerable<I3WAD22_Demo_MyFirstMVC.Models.StudentViewModel.StudentListItem>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Liste des étudiants</h1>
+
+<p>
+    <a asp-action="Create">Ajouter étudiant</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Prenom)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Prenom)
+            </td>
+            <td>
+                @Html.ActionLink("Modifier", "Edit", new { id=item.Email }) |
+                @Html.ActionLink("Vue détaillée", "Details", new { id=item.Email }) |
+                @Html.ActionLink("Supprimer", "Delete", new { id=item.Email })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
